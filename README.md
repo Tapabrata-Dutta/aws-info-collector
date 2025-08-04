@@ -1,22 +1,26 @@
-# AWS Info Collector Script
+#!/bin/bash
 
-A beginner-friendly Bash script to gather basic AWS resource information from your cloud account. This is a simple project created as part of my DevOps learning journey.
+# Author: Tapabrata Dutta
+# Date: 03/08/2025
+# Purpose: Collect basic AWS resource information using AWS CLI
 
-## 🔍 What It Does
+set -x  # Debug mode
 
-This script collects and saves the following AWS resource details to a file named `awsTrackerr`:
+LOG_FILE="aws_output.log"
+> "$LOG_FILE"  # Clear old log file
 
-- ✅ S3 Buckets
-- ✅ EC2 Instance IDs
-- ✅ Lambda Functions
-- ✅ IAM Users
+# List S3 Buckets
+echo -e "\n==== S3 Buckets ====" >> "$LOG_FILE"
+aws s3 ls >> "$LOG_FILE"
 
-## 📁 Output
+# List EC2 Instances
+echo -e "\n==== EC2 Instances ====" >> "$LOG_FILE"
+aws ec2 describe-instances | jq -r '.Reservations[].Instances[].InstanceId' >> "$LOG_FILE"
 
-All output is appended to a file called `awsTrackerr` in the current directory.
+# List Lambda Functions
+echo -e "\n==== Lambda Functions ====" >> "$LOG_FILE"
+aws lambda list-functions >> "$LOG_FILE"
 
-## 🛠️ How to Use
-
-1. **Give execute permission**:
-   ```bash
-   chmod +x aws_info_collector.sh
+# List IAM Users
+echo -e "\n==== IAM Users ====" >> "$LOG_FILE"
+aws iam list-users >> "$LOG_FILE"
